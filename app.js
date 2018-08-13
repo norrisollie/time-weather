@@ -29,12 +29,12 @@ function getUserLocation() {
 
 function setTime() {
 
-    date = new Date();
-    month = date.getMonth();
-    fullYear = date.getFullYear();
-    hours = date.getHours();
-    minutes = date.getMinutes();
-    seconds = date.getSeconds();
+    var date = new Date();
+    var month = date.getMonth();
+    var fullYear = date.getFullYear();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
 
     var time = document.getElementById("time");
 
@@ -81,104 +81,105 @@ function setTime() {
 
 
     switch (hours) {
-
-        case 0:
+        case "00":
             sunMoon.style.transform = "rotate(180deg)";
             container.style.backgroundColor = "#000000";
             break;
-        case 1:
+        case "01":
             sunMoon.style.transform = "rotate(195deg)";
             container.style.backgroundColor = "#000000";
             break;
-        case 2:
+        case "02":
             sunMoon.style.transform = "rotate(210deg)";
             container.style.backgroundColor = "#0c1317";
             break;
-        case 3:
+        case "03":
             sunMoon.style.transform = "rotate(225deg)";
             container.style.backgroundColor = "#19262f";
             break;
-        case 4:
+        case "04":
             sunMoon.style.transform = "rotate(240deg)";
             container.style.backgroundColor = "#253947";
             break;
-        case 5:
+        case "05":
             sunMoon.style.transform = "rotate(255deg)";
             container.style.backgroundColor = "#324c5f";
             break;
-        case 6:
+        case "06":
             sunMoon.style.transform = "rotate(270deg)";
             container.style.backgroundColor = "#3f6077";
             break;
-        case 7:
+        case "07":
             sunMoon.style.transform = "rotate(285deg)";
             container.style.backgroundColor = "#4b738e";
             break;
-        case 8:
+        case "08":
             sunMoon.style.transform = "rotate(300deg)";
             container.style.backgroundColor = "#5886a6";
             break;
-        case 9:
+        case "09":
             sunMoon.style.transform = "rotate(315deg)";
             container.style.backgroundColor = "#6499be";
             break;
-        case 10:
+        case "10":
             sunMoon.style.transform = "rotate(330deg)";
             container.style.backgroundColor = "#71acd6";
             break;
-        case 11:
+        case "11":
             sunMoon.style.transform = "rotate(345deg)";
             container.style.backgroundColor = "#7ec0ee";
             break;
-        case 12:
+        case "12":
             sunMoon.style.transform = "rotate(0deg)";
             container.style.backgroundColor = "#7ec0ee";
             break;
-        case 13:
+        case "13":
             sunMoon.style.transform = "rotate(15deg)";
             container.style.backgroundColor = "#7ec0ee";
             break;
-        case 14:
+        case "14":
             sunMoon.style.transform = "rotate(30deg)";
             container.style.backgroundColor = "#71acd6";
             break;
-        case 15:
+        case "15":
             sunMoon.style.transform = "rotate(45deg)";
             container.style.backgroundColor = "#6499be";
             break;
-        case 16:
+        case "16":
             sunMoon.style.transform = "rotate(60deg)";
             container.style.backgroundColor = "#5886a6";
             break;
-        case 17:
+        case "17":
             sunMoon.style.transform = "rotate(75deg)";
             container.style.backgroundColor = "#4b738e";
             break;
-        case 18:
+        case "18":
             sunMoon.style.transform = "rotate(90deg)";
             container.style.backgroundColor = "#3f6077";
             // sun.style.backgroundColor = "sun";
             break;
-        case 19:
+        case "19":
             sunMoon.style.transform = "rotate(105deg)";
             container.style.backgroundColor = "#324c5f";
             break;
-        case 20:
+        case "20":
             sunMoon.style.transform = "rotate(120deg)";
             container.style.backgroundColor = "#253947";
             break;
-        case 21:
+        case "21":
             sunMoon.style.transform = "rotate(135deg)";
             container.style.backgroundColor = "#19262f";
             break;
-        case 22:
+        case "22":
             sunMoon.style.transform = "rotate(150deg)";
             container.style.backgroundColor = "#0c1317";
             break;
-        case 23:
+        case "23":
             sunMoon.style.transform = "rotate(165deg)";
             container.style.backgroundColor = "#000000";
             break;
+        default:
+            console.log(hours);
     }
 }
 
