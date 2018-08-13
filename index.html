@@ -16,12 +16,12 @@
     }
 
     #sun-container {
-        width: 100px;
+        width: 150px;
         height: 100%;
         position: absolute;
         bottom: -50%;
         transform: translate(-50%, 50%);
-        left: calc(50% - 50px);
+        left: calc(50% - 75px);
         transform-origin: center;
     }
 
@@ -29,20 +29,20 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 100px;
-        height: 100px;
-        background-color: yellow;
-        border-radius: 100px;
+        width: 150px;
+        height: 150px;
+        background-color: #FCD440;
+        border-radius: 150px;
     }
 
     #moon {
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
         background-color: white;
-        border-radius: 100px;
+        border-radius: 150px;
     }
 
     #time-container {
@@ -56,166 +56,34 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
     }
 
     #time {
         color: #FFF;
         font-size: 100px;
-        font-family: "Avenir Next";
+        font-family: "Helvetica Neue";
+        font-weight: 900;
+        width: 450px;
+    }
+
+    #message {
+        position: relative;
+        top: 25px;
+        left: 2px;
+        color: #FFF;
+        font-size: 32px;
+        font-family: "Helvetica Neue";
+        font-weight: 900;
         width: 450px;
     }
     </style>
-    <script>
-    var date
-    var month
-    var fullYear
-    var hours
-    var minutes
-    var seconds
-
-    setInterval(function() {
-
-        date = new Date();
-
-        month = date.getMonth();
-        fullYear = date.getFullYear();
-        hours = date.getHours();
-        minutes = date.getMinutes();
-        seconds = date.getSeconds();
-
-        var time = document.getElementById("time");
-
-        if (minutes < 10) {
-
-            minutes = "0" + minutes
-
-        }
-
-        if (hours < 10) {
-
-            hours = "0" + hours
-
-        }
-
-        if (seconds < 10) {
-
-            seconds = "0" + seconds
-
-        }
-
-        time.innerHTML = hours + ":" + minutes + ":" + seconds;
-
-        console.log(hours + ":" + minutes + ":" + seconds);
-
-        var sunMoon = document.getElementById("sun-container");
-        var container = document.getElementById("container");
-
-        switch (hours) {
-
-            case 0:
-                sunMoon.style.transform = "rotate(180deg)";
-                container.style.backgroundColor = "#000000";
-                break;
-            case 1:
-                sunMoon.style.transform = "rotate(195deg)";
-                container.style.backgroundColor = "#000000";
-                break;
-            case 2:
-                sunMoon.style.transform = "rotate(210deg)";
-                container.style.backgroundColor = "#0c1317";
-                break;
-            case 3:
-                sunMoon.style.transform = "rotate(225deg)";
-                container.style.backgroundColor = "#19262f";
-                break;
-            case 4:
-                sunMoon.style.transform = "rotate(240deg)";
-                container.style.backgroundColor = "#253947";
-                break;
-            case 5:
-                sunMoon.style.transform = "rotate(255deg)";
-                container.style.backgroundColor = "#324c5f";
-                break;
-            case 6:
-                sunMoon.style.transform = "rotate(270deg)";
-                container.style.backgroundColor = "#3f6077";
-                break;
-            case 7:
-                sunMoon.style.transform = "rotate(285deg)";
-                container.style.backgroundColor = "#4b738e";
-                break;
-            case 8:
-                sunMoon.style.transform = "rotate(300deg)";
-                container.style.backgroundColor = "#5886a6";
-                break;
-            case 9:
-                sunMoon.style.transform = "rotate(315deg)";
-                container.style.backgroundColor = "#6499be";
-                break;
-            case 10:
-                sunMoon.style.transform = "rotate(330deg)";
-                container.style.backgroundColor = "#71acd6";
-                break;
-            case 11:
-                sunMoon.style.transform = "rotate(345deg)";
-                container.style.backgroundColor = "#7ec0ee";
-                break;
-            case 12:
-                sunMoon.style.transform = "rotate(0deg)";
-                container.style.backgroundColor = "#7ec0ee";
-                break;
-            case 13:
-                sunMoon.style.transform = "rotate(15deg)";
-                container.style.backgroundColor = "#7ec0ee";
-                break;
-            case 14:
-                sunMoon.style.transform = "rotate(30deg)";
-                container.style.backgroundColor = "#71acd6";
-                break;
-            case 15:
-                sunMoon.style.transform = "rotate(45deg)";
-                container.style.backgroundColor = "#6499be";
-                break;
-            case 16:
-                sunMoon.style.transform = "rotate(60deg)";
-                container.style.backgroundColor = "#5886a6";
-                break;
-            case 17:
-                sunMoon.style.transform = "rotate(75deg)";
-                container.style.backgroundColor = "#4b738e";
-                break;
-            case 18:
-                sunMoon.style.transform = "rotate(90deg)";
-                container.style.backgroundColor = "#3f6077";
-                break;
-            case 19:
-                sunMoon.style.transform = "rotate(105deg)";
-                container.style.backgroundColor = "#324c5f";
-                break;
-            case 20:
-                sunMoon.style.transform = "rotate(120deg)";
-                container.style.backgroundColor = "#253947";
-                break;
-            case 21:
-                sunMoon.style.transform = "rotate(135deg)";
-                container.style.backgroundColor = "#19262f";
-                break;
-            case 22:
-                sunMoon.style.transform = "rotate(150deg)";
-                container.style.backgroundColor = "#0c1317";
-                break;
-            case 23:
-                sunMoon.style.transform = "rotate(165deg)";
-                container.style.backgroundColor = "#000000";
-                break;
-        }
-
-    }, 1000);
-    </script>
+    <script src="app.js"></script>
 </head>
 
 <body>
     <div id="time-container">
+        <div id="message">Good <span id="time-of-day">Morning</span>, <span id="user-name">Ollie</span></div>
         <div id="time"></div>
     </div>
     <div id="container">
