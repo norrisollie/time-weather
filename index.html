@@ -5,93 +5,149 @@
     <meta charset="UTF-8">
     <title>Weather</title>
     <style>
-    #container {
+    body {
+        font-family: "Helvetica Neue";
+        color: #FFF;
+        font-weight: bolder;
+        padding: 0;
+        margin: 0;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .container {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(126, 192, 238);
-        overflow: hidden;
     }
 
-    #sun-container {
-        width: 150px;
-        height: 100%;
-        position: absolute;
-        bottom: -50%;
-        transform: translate(-50%, 50%);
-        left: calc(50% - 75px);
-        transform-origin: center;
+    #main-container {
+        background: skyblue;
+        transition: transform 0.5s ease;
     }
 
-    #sun {
-        position: absolute;
+    #settings-container {
+        position: fixed;
         top: 0;
-        left: 0;
-        width: 150px;
-        height: 150px;
-        background-color: #FCD440;
-        border-radius: 150px;
+        right: 0;
+        width: 300px;
+        height: 100%;
+        background-color: #FFF;
+        z-index: 999;
+        transform: translateX(300px);
+        transition: transform 0.5s ease;
     }
 
-    #moon {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 150px;
-        height: 150px;
-        background-color: white;
-        border-radius: 150px;
+    #sun-moon-container {
+        pointer-events: none;
     }
 
     #time-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 200px;
-        color: #000;
-        z-index: 999;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        pointer-events: none;
+    }
+
+    #greeting {
+        font-size: 24px;
+        margin-bottom: 10px;
     }
 
     #time {
-        color: #FFF;
         font-size: 100px;
-        font-family: "Helvetica Neue";
-        font-weight: 900;
-        width: 450px;
+        line-height: 60px;
     }
 
-    #message {
-        position: relative;
-        top: 25px;
-        left: 2px;
-        color: #FFF;
-        font-size: 32px;
-        font-family: "Helvetica Neue";
-        font-weight: 900;
-        width: 450px;
+    #settings-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        margin: 10px;
+        background-image: url(settings.svg);
+        background-position: center;
+        background-size: contain;
+        transition: transform 1s ease;
     }
+
+    #settings-button:hover {
+        transform: rotate(90deg);
+        cursor: pointer;
+    }
+
+    .title {
+        font-size: 18px;
+        font-weight: bolder;
+        color: #000;
+        margin-bottom: 5px;
+    }
+
+    .section {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .input {
+        margin-bottom: 5px;
+    }
+
+    .text-input {
+        padding: 10px;
+    }
+
     </style>
     <script src="app.js"></script>
 </head>
 
 <body>
-    <div id="time-container">
-        <div id="message">Good <span id="time-of-day">Morning</span>, <span id="user-name">Ollie</span></div>
-        <div id="time"></div>
+    <div id="settings-container">
+        
+        <div class="section">
+            
+            <div class="title">Change Nickname</div>
+            <input class="input text-input" id="name-input" type="text">
+            <input class="input button-input" id="set-name-input" type="button" value="Change Nickname">
+
+        </div>
+
     </div>
-    <div id="container">
-        <div id="sun-container">
-            <div id="sun"></div>
-            <div id="moon"></div>
+    <div class="container" id="main-container">
+        <div id="settings-button" data-state="hidden"></div>
+        <div class="container" id="sun-moon-container"></div>
+        <div class="container" id="time-container">
+            <div id="greeting">
+                Good <span id="time-of-day">Morning</span>, <span id="user-name"></span>
+            </div>
+            <div id="time">00:00:00</div>
         </div>
     </div>
+    <!--     <div id="settings-container">
+        <div class="section">
+            <div class="title">Change Nickname</div>
+            <input class="text-input" type="text" placeholder="enter a name">
+        </div>
+    </div>
+    <div id="container-wrapper">
+        <div id="settings-button" data-state="hidden"></div>
+        <div id="time-container">
+            <div id="message">Good <span id="time-of-day">Morning</span>, <span id="user-name">Ollie</span></div>
+            <div id="time"></div>
+        </div>
+        <div id="container">
+            <div id="sun-container">
+                <div id="sun"></div>
+                <div id="moon"></div>
+            </div>
+        </div>
+</div> -->
 </body>
 
 </html>
