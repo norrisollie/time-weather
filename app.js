@@ -11,8 +11,10 @@ function init() {
     // add listeners
     addListeners();
 
+    // check if name is stored in localstorage
     checkName();
 
+    getUserLocation();
 
 }
 
@@ -28,6 +30,10 @@ function setupDom() {
     app.dom.submitName = document.getElementById("set-name-input");
     app.dom.nameInput = document.getElementById("name-input");
     app.dom.userName = document.getElementById("user-name");
+    app.dom.sunMoon = document.getElementById("sun-moon");
+    app.dom.moon = document.getElementById("moon");
+    app.dom.sun = document.getElementById("sun");
+    app.dom.temp = document.getElementById("temp");
 
     app.dom.savedName = localStorage.getItem("name");
 
@@ -40,6 +46,80 @@ function addListeners() {
 
 }
 
+function getUserLocation() {
+
+    function success(position) {
+
+        console.log("success");
+
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+
+        console.log("lat: " + lat + "\nlat: " + lon)
+
+        createWeatherUrl(lat, lon);
+
+    }
+
+    function error() {
+
+        console.log("error");
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error);
+
+}
+
+function createWeatherUrl(lat, lon) {
+
+    var key = "175200d36b17e0983a92fd9d8217f8fb"
+    var id = "18203bac"
+    var url = "http://api.weatherunlocked.com/api/current/" + lat + "," + lon + "?app_id=" + id +"&app_key=" + key;
+
+    console.log(url);
+
+    request(url, weatherResponseHandler);
+
+}
+
+function request(url, callback) {
+
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+            // Success!
+            var data = JSON.parse(request.responseText);
+
+            callback(data);
+
+        } else {
+            // We reached our target server, but it returned an error
+
+        }
+    };
+
+    request.onerror = function() {
+        // There was a connection error of some sort
+    };
+
+    request.send();
+
+}
+
+var weatherResponseHandler = function(data) {
+
+    var temp_c = data.temp_c;
+
+    app.dom.temp.innerHTML = temp_c + "ºc"
+
+
+
+
+
+
+}
 
 // runs on init, to check if name key exists, and sets the username as the name in the key
 function checkName() {
@@ -79,10 +159,6 @@ function changeNameHandler() {
     checkName();
 
 }
-
-
-
-
 
 function setNameHandler() {
 
@@ -143,7 +219,6 @@ function settingsClickHandler(e) {
 
 function setTime() {
 
-
     // create new date object to get hours, minutes and seconds
     var date = new Date();
     var hours = date.getHours();
@@ -161,6 +236,19 @@ function setTime() {
         app.dom.timeOfDay.innerHTML = "Night";
     }
 
+    // calculate angle by * hour by 15 (15 deg incremenets)
+    var angle = hours * 15;
+
+    // calculate the background colour by incrementing the rgb values by multiplying hours by the sky blue rgb value
+    var bgColour_r = hours * 11.250;
+    var bgColour_g = hours * 17.166;
+    var bgColour_b = hours * 19.583;
+
+    var bgRBG = bgColour_r + "," + bgColour_g + "," + bgColour_b;
+
+    app.dom.mainContainer.style.backgroundColor = "rgb(" + bgRBG + ")";
+    app.dom.sunMoon.style.transform = "translate(-50%, -50%) rotate(" + angle + "deg)";
+
     // adds a 0 in front of the time if it's less than 10
     if (hours < 10) { hours = "0" + hours };
     if (minutes < 10) { minutes = "0" + minutes };
@@ -170,346 +258,6 @@ function setTime() {
 
     app.dom.time.innerHTML = timeString;
 
-    /* switch (hours) {
-        case 0:
-            sunMoon.style.transform = "rotate(180deg)";
-            container.style.backgroundColor = "#000000";
-            break;
-        case 1:
-            sunMoon.style.transform = "rotate(195deg)";
-            container.style.backgroundColor = "#000000";
-            break;
-        case 2:
-            sunMoon.style.transform = "rotate(210deg)";
-            container.style.backgroundColor = "#0c1317";
-            break;
-        case 3:
-            sunMoon.style.transform = "rotate(225deg)";
-            container.style.backgroundColor = "#19262f";
-            break;
-        case 4:
-            sunMoon.style.transform = "rotate(240deg)";
-            container.style.backgroundColor = "#253947";
-            break;
-        case 5:
-            sunMoon.style.transform = "rotate(255deg)";
-            container.style.backgroundColor = "#324c5f";
-            break;
-        case 6:
-            sunMoon.style.transform = "rotate(270deg)";
-            container.style.backgroundColor = "#3f6077";
-            break;
-        case 7:
-            sunMoon.style.transform = "rotate(285deg)";
-            container.style.backgroundColor = "#4b738e";
-            break;
-        case 8:
-            sunMoon.style.transform = "rotate(300deg)";
-            container.style.backgroundColor = "#5886a6";
-            break;
-        case 9:
-            sunMoon.style.transform = "rotate(315deg)";
-            container.style.backgroundColor = "#6499be";
-            break;
-        case 10:
-            sunMoon.style.transform = "rotate(330deg)";
-            container.style.backgroundColor = "#71acd6";
-            break;
-        case 11:
-            sunMoon.style.transform = "rotate(345deg)";
-            container.style.backgroundColor = "#7ec0ee";
-            break;
-        case 12:
-            sunMoon.style.transform = "rotate(0deg)";
-            container.style.backgroundColor = "#7ec0ee";
-            break;
-        case 13:
-            sunMoon.style.transform = "rotate(15deg)";
-            container.style.backgroundColor = "#7ec0ee";
-            break;
-        case 14:
-            sunMoon.style.transform = "rotate(30deg)";
-            container.style.backgroundColor = "#71acd6";
-            break;
-        case 15:
-            sunMoon.style.transform = "rotate(45deg)";
-            container.style.backgroundColor = "#6499be";
-            break;
-        case 16:
-            sunMoon.style.transform = "rotate(60deg)";
-            container.style.backgroundColor = "#5886a6";
-            break;
-        case 17:
-            sunMoon.style.transform = "rotate(75deg)";
-            container.style.backgroundColor = "#4b738e";
-            break;
-        case 18:
-            sunMoon.style.transform = "rotate(90deg)";
-            container.style.backgroundColor = "#3f6077";
-            // sun.style.backgroundColor = "sun";
-            break;
-        case 19:
-            sunMoon.style.transform = "rotate(105deg)";
-            container.style.backgroundColor = "#324c5f";
-            break;
-        case 20:
-            sunMoon.style.transform = "rotate(120deg)";
-            container.style.backgroundColor = "#253947";
-            break;
-        case 21:
-            sunMoon.style.transform = "rotate(135deg)";
-            container.style.backgroundColor = "#19262f";
-            break;
-        case 22:
-            sunMoon.style.transform = "rotate(150deg)";
-            container.style.backgroundColor = "#0c1317";
-            break;
-        case 23:
-            sunMoon.style.transform = "rotate(165deg)";
-            container.style.backgroundColor = "#000000";
-            break;
-    }
-    */
-
-
-    // console.log(hours)
-    // console.log(minutes)
-    // console.log(seconds)
-
-
-
 }
 
 window.onload = init
-
-
-
-
-
-
-
-
-// function init() {
-
-//     setInterval(setTime, 1000);
-//     getUserLocation();
-
-// }
-
-
-
-// function getUserLocation() {
-
-//     function success(position) {
-
-//         var latitude = position.coords.latitude;
-//         var longitude = position.coords.longitude;
-
-//         // console.log(latitude + "," + longitude)
-
-//         createWeatherUrl(latitude, longitude)
-
-
-
-//     }
-
-//     function error() {
-
-
-//     }
-
-//     navigator.geolocation.getCurrentPosition(success, error);
-
-// }
-
-// function createWeatherUrl(lat, lon) {
-
-//     console.log(lat + "," + lon);
-
-
-
-// }
-
-// function request(url) {
-
-//     var request = new XMLHttpRequest();
-//     request.open('GET', url, true);
-
-//     request.onload = function() {
-//         if (this.status >= 200 && this.status < 400) {
-//             // Success!
-//             var data = JSON.parse(this.response);
-//         } else {
-//             // We reached our target server, but it returned an error
-
-//         }
-//     };
-
-//     request.onerror = function() {
-//         // There was a connection error of some sort
-//     };
-
-//     request.send();
-
-
-// }
-
-
-
-// function setTime() {
-
-//     var date = new Date();
-//     var month = date.getMonth();
-//     var fullYear = date.getFullYear();
-//     var hours = date.getHours();
-//     var minutes = date.getMinutes();
-//     var seconds = date.getSeconds();
-
-//     var time = document.getElementById("time");
-
-//     if (minutes < 10) {
-
-//         minutes = "0" + minutes
-
-//     }
-
-//     if (hours < 10) {
-
-//         hours = "0" + hours
-
-//     }
-
-//     if (seconds < 10) {
-
-//         seconds = "0" + seconds
-
-//     }
-
-//     time.innerHTML = hours + ":" + minutes + ":" + seconds;
-
-//     var sunMoon = document.getElementById("sun-container");
-//     var sun = document.getElementById("sun");
-//     var moon = document.getElementById("moon");
-//     var container = document.getElementById("container");
-//     var timeOfDay = document.getElementById("time-of-day");
-//     var userName = document.getElementById("user-name");
-
-//     if (hours >= 6 && hours < 12) {
-
-//         timeOfDay.innerHTML = "Morning";
-
-//     } else if (hours >= 12 && hours < 18) {
-
-//         timeOfDay.innerHTML = "Afternoon";
-
-//     } else if (hours >= 18 && hours < 24) {
-
-//         timeOfDay.innerHTML = "Evening";
-
-//     }
-
-
-// switch (hours) {
-//     case 0:
-//         sunMoon.style.transform = "rotate(180deg)";
-//         container.style.backgroundColor = "#000000";
-//         break;
-//     case 01:
-//         sunMoon.style.transform = "rotate(195deg)";
-//         container.style.backgroundColor = "#000000";
-//         break;
-//     case 02:
-//         sunMoon.style.transform = "rotate(210deg)";
-//         container.style.backgroundColor = "#0c1317";
-//         break;
-//     case 03:
-//         sunMoon.style.transform = "rotate(225deg)";
-//         container.style.backgroundColor = "#19262f";
-//         break;
-//     case 04:
-//         sunMoon.style.transform = "rotate(240deg)";
-//         container.style.backgroundColor = "#253947";
-//         break;
-//     case 05:
-//         sunMoon.style.transform = "rotate(255deg)";
-//         container.style.backgroundColor = "#324c5f";
-//         break;
-//     case 06:
-//         sunMoon.style.transform = "rotate(270deg)";
-//         container.style.backgroundColor = "#3f6077";
-//         break;
-//     case 07:
-//         sunMoon.style.transform = "rotate(285deg)";
-//         container.style.backgroundColor = "#4b738e";
-//         break;
-//     case 08:
-//         sunMoon.style.transform = "rotate(300deg)";
-//         container.style.backgroundColor = "#5886a6";
-//         break;
-//     case 09:
-//         sunMoon.style.transform = "rotate(315deg)";
-//         container.style.backgroundColor = "#6499be";
-//         break;
-//     case 10:
-//         sunMoon.style.transform = "rotate(330deg)";
-//         container.style.backgroundColor = "#71acd6";
-//         break;
-//     case 11:
-//         sunMoon.style.transform = "rotate(345deg)";
-//         container.style.backgroundColor = "#7ec0ee";
-//         break;
-//     case 12:
-//         sunMoon.style.transform = "rotate(0deg)";
-//         container.style.backgroundColor = "#7ec0ee";
-//         break;
-//     case 13:
-//         sunMoon.style.transform = "rotate(15deg)";
-//         container.style.backgroundColor = "#7ec0ee";
-//         break;
-//     case 14:
-//         sunMoon.style.transform = "rotate(30deg)";
-//         container.style.backgroundColor = "#71acd6";
-//         break;
-//     case 15:
-//         sunMoon.style.transform = "rotate(45deg)";
-//         container.style.backgroundColor = "#6499be";
-//         break;
-//     case 16:
-//         sunMoon.style.transform = "rotate(60deg)";
-//         container.style.backgroundColor = "#5886a6";
-//         break;
-//     case 17:
-//         sunMoon.style.transform = "rotate(75deg)";
-//         container.style.backgroundColor = "#4b738e";
-//         break;
-//     case 18:
-//         sunMoon.style.transform = "rotate(90deg)";
-//         container.style.backgroundColor = "#3f6077";
-//         // sun.style.backgroundColor = "sun";
-//         break;
-//     case 19:
-//         sunMoon.style.transform = "rotate(105deg)";
-//         container.style.backgroundColor = "#324c5f";
-//         break;
-//     case 20:
-//         sunMoon.style.transform = "rotate(120deg)";
-//         container.style.backgroundColor = "#253947";
-//         break;
-//     case 21:
-//         sunMoon.style.transform = "rotate(135deg)";
-//         container.style.backgroundColor = "#19262f";
-//         break;
-//     case 22:
-//         sunMoon.style.transform = "rotate(150deg)";
-//         container.style.backgroundColor = "#0c1317";
-//         break;
-//     case 23:
-//         sunMoon.style.transform = "rotate(165deg)";
-//         container.style.backgroundColor = "#000000";
-//         break;
-//     default:
-//             console.log(hours);
-//     }
-// }
-
-// window.onload = init

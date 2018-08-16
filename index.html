@@ -6,7 +6,7 @@
     <title>Weather</title>
     <style>
     body {
-        font-family: "Helvetica Neue";
+        font-family: "helvetica neue";
         color: #FFF;
         font-weight: bolder;
         padding: 0;
@@ -26,7 +26,8 @@
     }
 
     #main-container {
-        background: skyblue;
+        background: rgb(0,0,0);/
+        /*background: rgb(135, 206, 235);/*/
         transition: transform 0.5s ease;
     }
 
@@ -44,6 +45,7 @@
 
     #sun-moon-container {
         pointer-events: none;
+        overflow: hidden;
     }
 
     #time-container {
@@ -56,12 +58,10 @@
 
     #greeting {
         font-size: 24px;
-        margin-bottom: 10px;
     }
 
     #time {
         font-size: 100px;
-        line-height: 60px;
     }
 
     #settings-button {
@@ -97,10 +97,56 @@
 
     .input {
         margin-bottom: 5px;
+        font-size: 16px;
     }
 
     .text-input {
         padding: 10px;
+    }
+
+    .button-input {
+        background-color: limegreen;
+    color: #FFF;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    }
+
+    #sun-moon {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        height: 150%;
+
+    }
+
+    #moon {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        width: 150px;
+        height: 150px;
+        background-color: #FFF;
+        border-radius: 100px;
+    }
+
+    #sun {
+        position: absolute;
+        bottom: 25px;
+        left: 25px;
+        width: 150px;
+        height: 150px;
+        background-color: yellow;
+        border-radius: 100px;
+    }
+
+    #time, #greeting {
+        width: 100%;
+        text-align: center;
     }
 
     </style>
@@ -121,12 +167,24 @@
     </div>
     <div class="container" id="main-container">
         <div id="settings-button" data-state="hidden"></div>
-        <div class="container" id="sun-moon-container"></div>
+        <div class="container" id="sun-moon-container">
+            
+            <div id="sun-moon">
+                
+                <div id="sun"></div>
+                <div id="moon"></div>
+
+            </div>
+
+        </div>
         <div class="container" id="time-container">
             <div id="greeting">
                 Good <span id="time-of-day">Morning</span>, <span id="user-name"></span>
             </div>
             <div id="time">00:00:00</div>
+            <div id="weather">
+                It's <span id="temp">0ºc</span> in <span id="location">Kings Cross</span>
+            </div>
         </div>
     </div>
     <!--     <div id="settings-container">
