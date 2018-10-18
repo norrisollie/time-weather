@@ -26,8 +26,7 @@
     }
 
     #main-container {
-        background: rgb(0,0,0);/
-        /*background: rgb(135, 206, 235);/*/
+        background: rgb(0, 0, 0);
         transition: transform 0.5s ease;
     }
 
@@ -46,6 +45,8 @@
     #sun-moon-container {
         pointer-events: none;
         overflow: hidden;
+        opacity: 0;
+        transition: all 1s ease;
     }
 
     #time-container {
@@ -54,27 +55,42 @@
         align-items: center;
         flex-direction: column;
         pointer-events: none;
+        opacity: 0;
+        transition: all 1s ease;
     }
 
-    #greeting {
+    #greeting,
+    #loc {
         font-size: 24px;
+    }
+
+    #loc {
+        position: relative;
+        z-index: 999;
     }
 
     #time {
         font-size: 100px;
     }
 
-    #settings-button {
-        position: absolute;
+    #settings-button,
+    #location-button {
+        /*        position: absolute;
         top: 0;
-        right: 0;
+        right: 0;*/
         width: 20px;
         height: 20px;
-        margin: 10px;
-        background-image: url(settings.svg);
         background-position: center;
         background-size: contain;
         transition: transform 1s ease;
+    }
+
+    #settings-button {
+        background-image: url(settings.svg);
+    }
+
+    #location-button {
+        background-image: url(location.svg);
     }
 
     #settings-button:hover {
@@ -82,22 +98,33 @@
         cursor: pointer;
     }
 
-    .title {
-        font-size: 18px;
-        font-weight: bolder;
-        color: #000;
-        margin-bottom: 5px;
-    }
-
     .section {
         display: flex;
         flex-direction: column;
-        padding: 20px;
+        padding: 5px 20px;
+    }
+
+    .section:first-child {
+        padding-top: 20px;
     }
 
     .input {
         margin-bottom: 5px;
         font-size: 16px;
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: bolder;
+        color: #000;
+    }
+
+    .info {
+        font-size: 12px;
+        font-weight: normal;
+        ;
+        color: #000;
+        margin-bottom: 5px;
     }
 
     .text-input {
@@ -106,12 +133,12 @@
 
     .button-input {
         background-color: limegreen;
-    color: #FFF;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    outline: none;
-    border-radius: 5px;
+        color: #FFF;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        outline: none;
+        border-radius: 5px;
     }
 
     #sun-moon {
@@ -121,7 +148,7 @@
         transform: translate(-50%, -50%);
         width: 200px;
         height: 150%;
-
+        /*animation: spin 1s linear infinite;*/
     }
 
     #moon {
@@ -144,38 +171,145 @@
         border-radius: 100px;
     }
 
-    #time, #greeting {
+    #time,
+    #greeting {
         width: 100%;
         text-align: center;
     }
 
+    #location-container,
+    #weather-container {
+        text-align: center;
+    }
+
+    #save-changes {
+        align-self: flex-end;
+    }
+
+    #menu-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    #location-button {
+        margin-right: 5px;
+    }
+
+    #location-container {
+        display: flex;
+        position: relative;
+    }
+
+    .icon {
+        margin: 10px;
+    }
+
+    #weather-details {
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 600px;
+        background-color: #fff;
+        top: calc(100% + 20px);
+        border-radius: 10px;
+        border: 2px solid #FFF;
+        padding:10px;
+        z-index: 100;
+    }
+
+    #weather-details::before {
+        content: "";
+        position: absolute;
+        top: -9px;
+        z-index: 1000;
+    right: 40px;
+        transform: rotate(45deg);
+        width: 13px;
+        height: 13px;
+        background-color: #FFF;
+    }
+
+    #weather-section {
+        width: 100%;
+        height: 200px;
+        color: #000;
+        font-size: 14px;
+    }
+
+    #weather-time-date {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    @keyframes spin {
+
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
     </style>
     <script src="app.js"></script>
 </head>
 
 <body>
     <div id="settings-container">
-        
         <div class="section">
-            
-            <div class="title">Change Nickname</div>
+            <div class="title">Nickname</div>
+            <div class="info">Change your nickname</div>
             <input class="input text-input" id="name-input" type="text">
-            <input class="input button-input" id="set-name-input" type="button" value="Change Nickname">
-
         </div>
-
+        <div class="section">
+            <div class="title">Location</div>
+            <div class="info">Change your location</div>
+            <input class="input text-input" id="name-input" type="text">
+        </div>
+        <div class="section" id="save-changes">
+            <input class="input button-input" id="set-name-input" type="button" value="Save Changes">
+        </div>
     </div>
     <div class="container" id="main-container">
-        <div id="settings-button" data-state="hidden"></div>
+        <div id="menu-bar">
+            <div id="location-container" class="icon">
+                <div id="location-button" data-state="hidden"></div><span class="loc">Kings Cross</span>
+                <div id="weather-details">
+                    <div id="weather-section">
+                        <div id="weather-time-date"><span id="weather-date">17th August</span></div>
+                    </div>
+                                        <div id="weather-section">
+                        <div id="weather-time-date"><span id="weather-date">18th August</span></div>
+                    </div>
+                                        <div id="weather-section">
+                        <div id="weather-time-date"><span id="weather-date">19th August</span></div>
+                    </div>
+                                        <div id="weather-section">
+                        <div id="weather-time-date"><span id="weather-date">20th August</span></div>
+                    </div>
+                                        <div id="weather-section">
+                        <div id="weather-time-date"><span id="weather-date">21st August</span></div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="icon" id="settings-button" data-state="hidden"></div>
+        </div>
         <div class="container" id="sun-moon-container">
-            
             <div id="sun-moon">
-                
                 <div id="sun"></div>
                 <div id="moon"></div>
-
             </div>
-
         </div>
         <div class="container" id="time-container">
             <div id="greeting">
@@ -183,29 +317,15 @@
             </div>
             <div id="time">00:00:00</div>
             <div id="weather">
-                It's <span id="temp">0ºc</span> in <span id="location">Kings Cross</span>
+                <div id="location-container">
+                    <span class="loc">Kings Cross</span>
+                </div>
+                <div id="weather-container">
+                    <span id="temp">0ºc</span> | <span id="desc">stormy</span>
+                </div>
             </div>
         </div>
     </div>
-    <!--     <div id="settings-container">
-        <div class="section">
-            <div class="title">Change Nickname</div>
-            <input class="text-input" type="text" placeholder="enter a name">
-        </div>
-    </div>
-    <div id="container-wrapper">
-        <div id="settings-button" data-state="hidden"></div>
-        <div id="time-container">
-            <div id="message">Good <span id="time-of-day">Morning</span>, <span id="user-name">Ollie</span></div>
-            <div id="time"></div>
-        </div>
-        <div id="container">
-            <div id="sun-container">
-                <div id="sun"></div>
-                <div id="moon"></div>
-            </div>
-        </div>
-</div> -->
 </body>
 
 </html>

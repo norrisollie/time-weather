@@ -12,7 +12,11 @@ function init() {
     addListeners();
 
     // check if name is stored in localstorage
-    checkName();
+    // checkName();
+
+
+    // check if name is stored in localstorage
+    // checkLocation();
 
     getUserLocation();
 
@@ -25,17 +29,29 @@ function setupDom() {
     app.dom.settingsButton = document.getElementById("settings-button")
     app.dom.settingsContainer = document.getElementById("settings-container");
     app.dom.mainContainer = document.getElementById("main-container");
+    app.dom.timeContainer = document.getElementById("time-container");
     app.dom.time = document.getElementById("time");
     app.dom.timeOfDay = document.getElementById("time-of-day");
     app.dom.submitName = document.getElementById("set-name-input");
     app.dom.nameInput = document.getElementById("name-input");
     app.dom.userName = document.getElementById("user-name");
     app.dom.sunMoon = document.getElementById("sun-moon");
+    app.dom.sunMoonContainer = document.getElementById("sun-moon-container");
     app.dom.moon = document.getElementById("moon");
     app.dom.sun = document.getElementById("sun");
     app.dom.temp = document.getElementById("temp");
+    app.dom.desc = document.getElementById("desc");
+    app.dom.loc = document.querySelectorAll(".loc");
+    app.dom.setLocationInput = document.getElementById("set-location-input")
+
 
     app.dom.savedName = localStorage.getItem("name");
+    app.dom.savedLocation = localStorage.getItem("location");
+
+    // console.log(localStorage.key)
+
+    checkLocalStorage(app.dom.savedName)
+    checkLocalStorage(app.dom.savedLocation)
 
 }
 
@@ -72,9 +88,8 @@ function getUserLocation() {
 
 function createWeatherUrl(lat, lon) {
 
-    var key = "175200d36b17e0983a92fd9d8217f8fb"
-    var id = "18203bac"
-    var url = "http://api.weatherunlocked.com/api/current/" + lat + "," + lon + "?app_id=" + id +"&app_key=" + key;
+    var key = "26635eff02fd24fca61eaae889279afb"
+    var url = "https://api.openweathermap.org/data/2.5/forecast?&lat=" + lat + "&lon=" + lon + "&appid=" + key + "&units=metric"
 
     console.log(url);
 
@@ -110,40 +125,125 @@ function request(url, callback) {
 
 var weatherResponseHandler = function(data) {
 
-    var temp_c = data.temp_c;
+    var name = data.city.name
+    var desc = data.list[0].weather[0].main
+    var temp = data.list[0].main.temp;
+    var tempRound = Math.round(temp);
 
-    app.dom.temp.innerHTML = temp_c + "ºc"
+    for (var i = 0; i < app.dom.loc.length; i++) {
+        app.dom.loc[i].innerHTML = name
+    }
+
+    app.dom.desc.innerHTML = desc
+    app.dom.temp.innerHTML = tempRound + "&deg;c"
+
+    console.log(data.list.length);
+
+    var weatherEl = createEl(data.list.length, "div");
+
+    for (var i = 0; i < data.list.length; i++) {
+
+        var dateTime = data.list[i].dt_txt
+
+        var date = dateTime.substring(0, 10),
+            weatherDay = date.substring(8, 10),
+            weatherMonth = date.substring(5, 7),
+            weatherYear = date.substring(0, 4),
+            time = dateTime.substring(11, 19),
+            weatherHour = time.substring(0, 2),
+            weatherMinute = time.substring(3, 5);
+
+        // console.log("Date: " + weatherDay + "/" + weatherMonth + "\n" + "Time: " + weatherHour + ":" + weatherMinute + "\n" + );
+
+        // console.log("weatherDay: " + weatherDay);
+        // console.log("weatherMonth: " + weatherMonth);
+        // console.log("weatherYear: " + weatherYear);
+        // console.log("weatherHour: " + weatherHour);
+        // console.log("weatherMinute: " + weatherMinute);
+
+
+        // console.log("date: " + date);
+        // console.log("time: " + time);
+
+    }
+
+    for (var i = 0; i < weatherEl.length; i++) {
+
+        weatherEl[i].classList.add("weather-container");
+
+        weatherEl[i].innerHTML += date + "<br>" + time;
+
+
+
+
+    }
+
+    // console.log(weatherEl)
+}
 
 
 
 
 
+
+
+
+
+
+
+
+
+function createEl(number, type) {
+
+    var arr = [];
+
+    for (var i = 0; i < number; i++) {
+
+        var el = document.createElement(type);
+
+        arr.push(el)
+
+
+    }
+
+    return arr
 
 }
 
-// runs on init, to check if name key exists, and sets the username as the name in the key
-function checkName() {
+function appendEl(arr, container) {
 
-    setupDom();
+    for(var i = 0; i < arr.length; i++) {
 
-    console.log("Checking name...");
+        container.appendChild(arr[i]);
 
-    // check if 
-    if (app.dom.savedName !== null && app.dom.savedName.length < 1) {
-
-        console.log("app.dom.savedName exists, but no name set")
-
-    } else if (app.dom.savedName !== null && app.dom.savedName.length >= 1) {
-
-        console.log("name set as: " + app.dom.savedName)
-
-        app.dom.userName.innerHTML = app.dom.savedName
-
-    } else if (app.dom.savedName === null) {
-
-        console.log("savedName does not exist");
     }
 }
+
+function checkLocalStorage(key) {
+
+    // setupDom();
+
+    console.log("Checking key...");
+
+    // check if 
+    if (key !== null && key.length < 1) {
+
+        console.log("key exists, but no name set")
+
+    } else if (key !== null && key.length >= 1) {
+
+        console.log("key exists, set as: " + key)
+
+        app.dom.userName.innerHTML = key
+
+    } else if (key === null) {
+
+        console.log("key does not exist");
+    }
+
+}
+
+
 
 function changeNameHandler() {
 
@@ -156,7 +256,7 @@ function changeNameHandler() {
 
     localStorage.setItem("name", newName)
 
-    checkName();
+    checkLocalStorage(app.dom.savedName)
 
 }
 
@@ -240,9 +340,16 @@ function setTime() {
     var angle = hours * 15;
 
     // calculate the background colour by incrementing the rgb values by multiplying hours by the sky blue rgb value
-    var bgColour_r = hours * 11.250;
-    var bgColour_g = hours * 17.166;
-    var bgColour_b = hours * 19.583;
+    if (hours <= 12) {
+        var bgColour_r = hours * 11.250;
+        var bgColour_g = hours * 17.166;
+        var bgColour_b = hours * 19.583;
+    }
+    if (hours > 12) {
+        var bgColour_r = (hours * 11.25) - (11.25 * ((hours - 12) * 2));
+        var bgColour_g = (hours * 17.166) - (17.166 * ((hours - 12) * 2));
+        var bgColour_b = (hours * 19.583) - (19.583 * ((hours - 12) * 2));
+    }
 
     var bgRBG = bgColour_r + "," + bgColour_g + "," + bgColour_b;
 
@@ -257,6 +364,9 @@ function setTime() {
     var timeString = hours + ":" + minutes + ":" + seconds;
 
     app.dom.time.innerHTML = timeString;
+
+    app.dom.timeContainer.style.opacity = "1";
+    app.dom.sunMoonContainer.style.opacity = "1";
 
 }
 
